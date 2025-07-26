@@ -75,7 +75,7 @@ const Navbar = () => {
                 to="/login"
                 className="flex items-center space-x-1 text-gray-700 hover:text-primary transition-colors"
               >
-                <User className="w-5 h-5" />
+                  <User className="w-5 h-5" />
                 <span className="hidden sm:block text-sm">Login</span>
               </Link>
           
