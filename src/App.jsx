@@ -1,6 +1,7 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { CartProvider } from './context/CartContext';
+import { AuthProvider } from './context/AuthContext';
 
 import { ToastProvider } from './components/Toast';
 import Navbar from './components/Navbar';
@@ -15,11 +16,10 @@ import About from './pages/About';
 import Contact from './pages/Contact';
 
 function App() {
-
   console.log("test-app");
   return (
     <Router>
-      
+      <AuthProvider>
         <CartProvider>
           <ToastProvider>
             <div className="min-h-screen bg-gray-50">
@@ -40,7 +40,7 @@ function App() {
             </div>
           </ToastProvider>
         </CartProvider>
-      
+      </AuthProvider>
     </Router>
   );
 }

@@ -2,11 +2,12 @@ import React, { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { ShoppingCart, User, Menu, X, Heart } from 'lucide-react';
 import { useCart } from '../context/CartContext';
-
+import { useAuth } from '../context/AuthContext';
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const { state: cartState } = useCart();
+  const { user, isAuthenticated, logout } = useAuth();
   
   const location = useLocation();
 
@@ -18,6 +19,10 @@ const Navbar = () => {
   ];
 
   const isActive = (path) => location.pathname === path;
+
+  const handleLogout = async () => {
+    await logout();
+  };
 
   return (
     <nav className="bg-white shadow-lg sticky top-0 z-40">
@@ -51,18 +56,18 @@ const Navbar = () => {
           {/* Right side icons */}
           <div className="flex items-center space-x-4">
             {/* Auth */}
-            {/* {authState.isAuthenticated ? (
+            {isAuthenticated ? (
               <div className="relative group">
                 <button className="flex items-center space-x-2 text-gray-700 hover:text-primary transition-colors">
                   <User className="w-5 h-5" />
                   <span className="hidden sm:block text-sm">
-                    {authState.user?.name}
+                    {user?.displayName || user?.email?.split('@')[0] || 'User'}
                   </span>
                 </button>
                 <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200">
                   <div className="py-1">
                     <button
-                      
+                      onClick={handleLogout}
                       className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                     >
                       Logout
@@ -70,15 +75,15 @@ const Navbar = () => {
                   </div>
                 </div>
               </div>
-            ) : ( */}
+            ) : (
               <Link
                 to="/login"
                 className="flex items-center space-x-1 text-gray-700 hover:text-primary transition-colors"
               >
-                  <User className="w-5 h-5" />
+                <User className="w-5 h-5" />
                 <span className="hidden sm:block text-sm">Login</span>
               </Link>
-          
+            )}
 
             {/* Cart */}
             <Link
@@ -122,6 +127,31 @@ const Navbar = () => {
                 {item.name}
               </Link>
             ))}
+            
+            {/* Mobile Auth */}
+            {isAuthenticated ? (
+              <div className="border-t pt-2 mt-2">
+                <div className="px-3 py-2 text-sm text-gray-600">
+                  {user?.displayName || user?.email?.split('@')[0] || 'User'}
+                </div>
+                <button
+                  onClick={handleLogout}
+                  className="block w-full text-left px-3 py-2 text-base font-medium text-gray-700 hover:text-secondary hover:bg-secondary/5"
+                >
+                  Logout
+                </button>
+              </div>
+            ) : (
+              <div className="border-t pt-2 mt-2">
+                <Link
+                  to="/login"
+                  onClick={() => setIsMenuOpen(false)}
+                  className="block px-3 py-2 text-base font-medium text-gray-700 hover:text-secondary hover:bg-secondary/5"
+                >
+                  Login
+                </Link>
+              </div>
+            )}
           </div>
         </div>
       )}
