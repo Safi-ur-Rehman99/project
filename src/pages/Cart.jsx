@@ -4,6 +4,7 @@ import { Trash2, Plus, Minus, ShoppingBag, ArrowRight } from 'lucide-react';
 import { useCart } from '../context/CartContext';
 import { useToast } from '../components/Toast';
 
+
 const Cart = () => {
   const { state, dispatch } = useCart();
   const { addToast } = useToast();
