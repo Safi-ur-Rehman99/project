@@ -95,7 +95,7 @@ const Footer = () => {
 
         {/* Bottom */}
         <div className="border-t border-gray-200 mt-8 pt-8 text-center text-gray-500">
-          <p>&copy; 2024 Kids Corner. All rights reserved.</p>
+          <p>&copy; 2025 Kids Corner. All rights reserved.</p>
         </div>
       </div>
     </footer>
