@@ -5,7 +5,7 @@ import { useToast } from "../components/Toast";
 import { getAuth, createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 import { app } from "../firebase.config";
 import { useAuth } from "../context/AuthContext";
-
+import Ballpit from "./Ballpit";
 const auth = getAuth(app);
 
 const Signup = () => {
@@ -65,16 +65,22 @@ const Signup = () => {
   };
 
   return (
+
+    
     <div className="min-h-screen relative flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
-      {/* Background with gradient and pattern */}
-      <div className="absolute inset-0 bg-gradient-to-br from-pink-100 via-white to-primary/10"></div>
-      <div className="absolute inset-0 bg-gradient-to-tr from-secondary/5 via-transparent to-pink-200/20"></div>
-      
-      {/* Decorative elements */}
-      <div className="absolute top-10 left-10 w-20 h-20 bg-secondary/20 rounded-full blur-xl"></div>
-      <div className="absolute top-32 right-20 w-32 h-32 bg-primary/10 rounded-full blur-2xl"></div>
-      <div className="absolute bottom-20 left-1/4 w-24 h-24 bg-pink-300/20 rounded-full blur-xl"></div>
-      <div className="absolute bottom-32 right-10 w-16 h-16 bg-secondary/30 rounded-full blur-lg"></div>
+     
+    <div className='absolute inset-0'>
+      <Ballpit
+    count={100}
+    gravity={0.01}
+    friction={0.9975}
+    wallBounce={0.95}
+    ambientColor={16777215}
+    ambientIntensity={0.3}
+    lightIntensity={50}  
+    followCursor={false}
+    colors={['#1e7a96']}
+  /></div>
 
       <div className="max-w-md w-full space-y-8">
         <div className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-xl p-8 border border-white/20">
