@@ -28,5 +28,9 @@
     "postcss": "^8.4.35",
     "tailwindcss": "^3.4.1",
     "vite": "^5.4.2"
-  }
+  },
+  "description": "> **Giving toys a second chance to bring joy while building a sustainable future for our children**",
+  "main": "eslint.config.js",
+  "author": "",
+  "license": "ISC"
 }
