@@ -29,19 +29,19 @@ console.log('Newsletter signup:', email);
 
 **File Modified:** `src/pages/Shop.jsx`
 
-**Issue:** Array.sort() mutates the original array, which can cause unexpected side effects when used with React's useMemo hook.
+**Issue:** Array.sort() mutates the original array, which can cause unexpected side effects when used directly on the products array.
 
-**Solution:** Created a new array using the spread operator before sorting.
+**Solution:** Since the filter operations already create a new array, we can safely sort it directly without additional spreading.
 
 ```javascript
-// Before
-filtered.sort((a, b) => a.price - b.price);
+// Before (potential mutation)
+products.sort((a, b) => a.price - b.price);
 
-// After
-filtered = [...filtered].sort((a, b) => a.price - b.price);
+// After (safe sorting on filtered array)
+filtered.sort((a, b) => a.price - b.price);
 ```
 
-**Impact:** Prevents unintended mutations and ensures predictable behavior in the filtering logic.
+**Impact:** Prevents unintended mutations while maintaining optimal performance by avoiding unnecessary array copies.
 
 ## 3. Optimized Batch Cart Operations
 
