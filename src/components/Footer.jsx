@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, memo } from 'react';
 import { Link } from 'react-router-dom';
 import { Heart, Mail, Instagram, Facebook, Twitter } from 'lucide-react';
 
@@ -7,8 +7,7 @@ const Footer = () => {
 
   const handleNewsletterSubmit = (e) => {
     e.preventDefault();
-    // Mock newsletter signup
-    console.log('Newsletter signup:', email);
+    // TODO: Implement newsletter signup
     setEmail('');
   };
 
@@ -102,4 +101,4 @@ const Footer = () => {
   );
 };
 
-export default Footer;
+export default memo(Footer);

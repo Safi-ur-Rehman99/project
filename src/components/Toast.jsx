@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useMemo, useCallback, memo } from 'react';
 import { X, CheckCircle, AlertCircle, Info } from 'lucide-react';
 
 const ToastContext = React.createContext(null);
@@ -6,7 +6,11 @@ const ToastContext = React.createContext(null);
 export const ToastProvider = ({ children }) => {
   const [toasts, setToasts] = useState([]);
 
-  const addToast = (message, type, duration = 3000) => {
+  const removeToast = useCallback((id) => {
+    setToasts(prev => prev.filter(toast => toast.id !== id));
+  }, []);
+
+  const addToast = useCallback((message, type, duration = 3000) => {
     const id = Date.now().toString();
     const toast = { id, message, type, duration };
     
@@ -15,21 +19,23 @@ export const ToastProvider = ({ children }) => {
     setTimeout(() => {
       removeToast(id);
     }, duration);
-  };
+  }, [removeToast]);
 
-  const removeToast = (id) => {
-    setToasts(prev => prev.filter(toast => toast.id !== id));
-  };
+  const value = useMemo(() => ({ 
+    toasts, 
+    addToast, 
+    removeToast 
+  }), [toasts, addToast, removeToast]);
 
   return (
-    <ToastContext.Provider value={{ toasts, addToast, removeToast }}>
+    <ToastContext.Provider value={value}>
       {children}
       <ToastContainer toasts={toasts} onRemove={removeToast} />
     </ToastContext.Provider>
   );
 };
 
-const ToastContainer = ({ toasts, onRemove }) => {
+const ToastContainer = memo(({ toasts, onRemove }) => {
   return (
     <div className="fixed top-4 right-4 z-50 space-y-2">
       {toasts.map(toast => (
@@ -37,9 +43,11 @@ const ToastContainer = ({ toasts, onRemove }) => {
       ))}
     </div>
   );
-};
+});
 
-const ToastItem = ({ toast, onRemove }) => {
+ToastContainer.displayName = 'ToastContainer';
+
+const ToastItem = memo(({ toast, onRemove }) => {
   const getIcon = () => {
     switch (toast.type) {
       case 'success':
@@ -74,7 +82,9 @@ const ToastItem = ({ toast, onRemove }) => {
       </button>
     </div>
   );
-};
+});
+
+ToastItem.displayName = 'ToastItem';
 
 export const useToast = () => {
   const context = React.useContext(ToastContext);
