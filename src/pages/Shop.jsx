@@ -37,23 +37,18 @@ const Shop = () => {
       product.price >= priceRange[0] && product.price <= priceRange[1]
     );
 
-    // Sort products
+    // Sort products (filtered is already a new array from filter operations)
     switch (sortBy) {
       case 'price-low':
-        filtered.sort((a, b) => a.price - b.price);
-        break;
+        return filtered.sort((a, b) => a.price - b.price);
       case 'price-high':
-        filtered.sort((a, b) => b.price - a.price);
-        break;
+        return filtered.sort((a, b) => b.price - a.price);
       case 'name':
-        filtered.sort((a, b) => a.name.localeCompare(b.name));
-        break;
+        return filtered.sort((a, b) => a.name.localeCompare(b.name));
       default:
         // newest first (default order)
-        break;
+        return filtered;
     }
-
-    return filtered;
   }, [searchTerm, selectedCategory, selectedCondition, priceRange, sortBy]);
 
   return (

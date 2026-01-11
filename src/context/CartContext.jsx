@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useReducer } from 'react';
+import React, { createContext, useContext, useReducer, useMemo } from 'react';
 
 const CartContext = createContext(null);
 
@@ -6,26 +6,27 @@ const cartReducer = (state, action) => {
   switch (action.type) {
     case 'ADD_ITEM': {
       const existingItem = state.items.find(item => item.id === action.payload.id);
+      const quantityToAdd = action.payload.quantity || 1;
       
       if (existingItem) {
         const updatedItems = state.items.map(item =>
           item.id === action.payload.id
-            ? { ...item, quantity: item.quantity + 1 }
+            ? { ...item, quantity: item.quantity + quantityToAdd }
             : item
         );
         return {
           ...state,
           items: updatedItems,
-          total: state.total + action.payload.price,
-          itemCount: state.itemCount + 1,
+          total: state.total + (action.payload.price * quantityToAdd),
+          itemCount: state.itemCount + quantityToAdd,
         };
       }
       
       return {
         ...state,
-        items: [...state.items, { ...action.payload, quantity: 1 }],
-        total: state.total + action.payload.price,
-        itemCount: state.itemCount + 1,
+        items: [...state.items, { ...action.payload, quantity: quantityToAdd }],
+        total: state.total + (action.payload.price * quantityToAdd),
+        itemCount: state.itemCount + quantityToAdd,
       };
     }
     
@@ -82,8 +83,10 @@ export const CartProvider = ({ children }) => {
     itemCount: 0,
   });
 
+  const value = useMemo(() => ({ state, dispatch }), [state]);
+
   return (
-    <CartContext.Provider value={{ state, dispatch }}>
+    <CartContext.Provider value={value}>
       {children}
     </CartContext.Provider>
   );

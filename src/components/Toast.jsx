@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useMemo, useCallback, memo } from 'react';
 import { X, CheckCircle, AlertCircle, Info } from 'lucide-react';
 
 const ToastContext = React.createContext(null);
@@ -6,7 +6,11 @@ const ToastContext = React.createContext(null);
 export const ToastProvider = ({ children }) => {
   const [toasts, setToasts] = useState([]);
 
-  const addToast = (message, type, duration = 3000) => {
+  const removeToast = useCallback((id) => {
+    setToasts(prev => prev.filter(toast => toast.id !== id));
+  }, []);
+
+  const addToast = useCallback((message, type, duration = 3000) => {
     const id = Date.now().toString();
     const toast = { id, message, type, duration };
     
@@ -15,21 +19,23 @@ export const ToastProvider = ({ children }) => {
     setTimeout(() => {
       removeToast(id);
     }, duration);
-  };
+  }, [removeToast]);
 
-  const removeToast = (id) => {
-    setToasts(prev => prev.filter(toast => toast.id !== id));
-  };
+  const value = useMemo(() => ({ 
+    toasts, 
+    addToast, 
+    removeToast 
+  }), [toasts, addToast, removeToast]);
 
   return (
-    <ToastContext.Provider value={{ toasts, addToast, removeToast }}>
+    <ToastContext.Provider value={value}>
       {children}
       <ToastContainer toasts={toasts} onRemove={removeToast} />
     </ToastContext.Provider>
   );
 };
 
-const ToastContainer = ({ toasts, onRemove }) => {
+const ToastContainer = memo(({ toasts, onRemove }) => {
   return (
     <div className="fixed top-4 right-4 z-50 space-y-2">
       {toasts.map(toast => (
@@ -37,34 +43,40 @@ const ToastContainer = ({ toasts, onRemove }) => {
       ))}
     </div>
   );
+});
+
+ToastContainer.displayName = 'ToastContainer';
+
+const getToastIcon = (type) => {
+  switch (type) {
+    case 'success':
+      return <CheckCircle className="w-5 h-5 text-green-500" />;
+    case 'error':
+      return <AlertCircle className="w-5 h-5 text-red-500" />;
+    case 'info':
+      return <Info className="w-5 h-5 text-blue-500" />;
+    default:
+      return null;
+  }
 };
 
-const ToastItem = ({ toast, onRemove }) => {
-  const getIcon = () => {
-    switch (toast.type) {
-      case 'success':
-        return <CheckCircle className="w-5 h-5 text-green-500" />;
-      case 'error':
-        return <AlertCircle className="w-5 h-5 text-red-500" />;
-      case 'info':
-        return <Info className="w-5 h-5 text-blue-500" />;
-    }
-  };
+const getToastBgColor = (type) => {
+  switch (type) {
+    case 'success':
+      return 'bg-green-50 border-green-200';
+    case 'error':
+      return 'bg-red-50 border-red-200';
+    case 'info':
+      return 'bg-blue-50 border-blue-200';
+    default:
+      return 'bg-gray-50 border-gray-200';
+  }
+};
 
-  const getBgColor = () => {
-    switch (toast.type) {
-      case 'success':
-        return 'bg-green-50 border-green-200';
-      case 'error':
-        return 'bg-red-50 border-red-200';
-      case 'info':
-        return 'bg-blue-50 border-blue-200';
-    }
-  };
-
+const ToastItem = memo(({ toast, onRemove }) => {
   return (
-    <div className={`flex items-center p-4 rounded-lg border shadow-lg animate-slide-up ${getBgColor()}`}>
-      {getIcon()}
+    <div className={`flex items-center p-4 rounded-lg border shadow-lg animate-slide-up ${getToastBgColor(toast.type)}`}>
+      {getToastIcon(toast.type)}
       <p className="ml-3 text-sm font-medium text-gray-800">{toast.message}</p>
       <button
         onClick={() => onRemove(toast.id)}
@@ -74,7 +86,9 @@ const ToastItem = ({ toast, onRemove }) => {
       </button>
     </div>
   );
-};
+});
+
+ToastItem.displayName = 'ToastItem';
 
 export const useToast = () => {
   const context = React.useContext(ToastContext);
