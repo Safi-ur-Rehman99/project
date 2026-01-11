@@ -83,7 +83,7 @@ export const CartProvider = ({ children }) => {
     itemCount: 0,
   });
 
-  const value = useMemo(() => ({ state, dispatch }), [state]);
+  const value = useMemo(() => ({ state, dispatch }), [state, dispatch]);
 
   return (
     <CartContext.Provider value={value}>
