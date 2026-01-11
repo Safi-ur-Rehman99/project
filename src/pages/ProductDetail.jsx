@@ -31,20 +31,19 @@ const ProductDetail = () => {
   }
 
   const handleAddToCart = () => {
-    for (let i = 0; i < quantity; i++) {
-      dispatch({
-        type: 'ADD_ITEM',
-        payload: {
-          id: product.id,
-          name: product.name,
-          price: product.price,
-          image: product.image,
-          condition: product.condition,
-        }
-      });
-    }
+    dispatch({
+      type: 'ADD_ITEM',
+      payload: {
+        id: product.id,
+        name: product.name,
+        price: product.price,
+        image: product.image,
+        condition: product.condition,
+        quantity: quantity,
+      }
+    });
     
-    addToast(`${product.name} added to cart!`, 'success');
+    addToast(`${quantity} ${product.name}${quantity > 1 ? 's' : ''} added to cart!`, 'success');
   };
 
   const getConditionColor = (condition) => {
@@ -79,6 +78,7 @@ const ProductDetail = () => {
               <img
                 src={product.images[selectedImageIndex]}
                 alt={product.name}
+                loading="lazy"
                 className="w-full h-full object-cover"
               />
             </div>
@@ -96,6 +96,7 @@ const ProductDetail = () => {
                     <img
                       src={image}
                       alt={`${product.name} ${index + 1}`}
+                      loading="lazy"
                       className="w-full h-full object-cover"
                     />
                   </button>

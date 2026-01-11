@@ -4,6 +4,31 @@ import { ArrowRight, Recycle, Heart, Shield, Truck } from 'lucide-react';
 import { products, categories, instagramFeed } from '../data/products';
 import ProductCard from '../components/ProductCard';
 
+const FEATURES = [
+  {
+    icon: Recycle,
+    title: 'Sustainable',
+    description: 'Reduce waste by giving toys a second life'
+  },
+  {
+    icon: Heart,
+    iconColor: 'text-pink-500',
+    title: 'Curated with Love',
+    description: 'Each toy is carefully selected for quality'
+  },
+  {
+    icon: Shield,
+    iconColor: 'text-primary',
+    title: 'Safe & Clean',
+    description: 'Thoroughly cleaned and safety-checked'
+  },
+  {
+    icon: Truck,
+    title: 'Fast Delivery',
+    description: 'Quick and secure shipping across Pakistan'
+  }
+];
+
 const Home = () => {
   const featuredProducts = products.filter(product => product.featured);
 
@@ -58,36 +83,19 @@ const Home = () => {
           </div>
           
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-            {[
-              {
-                icon: <Recycle className="w-8 h-8 text-secondary" />,
-                title: 'Sustainable',
-                description: 'Reduce waste by giving toys a second life'
-              },
-              {
-                icon: <Heart className="w-8 h-8 text-pink-500" />,
-                title: 'Curated with Love',
-                description: 'Each toy is carefully selected for quality'
-              },
-              {
-                icon: <Shield className="w-8 h-8 text-primary" />,
-                title: 'Safe & Clean',
-                description: 'Thoroughly cleaned and safety-checked'
-              },
-              {
-                icon: <Truck className="w-8 h-8 text-secondary" />,
-                title: 'Fast Delivery',
-                description: 'Quick and secure shipping across Pakistan'
-              }
-            ].map((item, index) => (
-              <div key={index} className="text-center p-6 rounded-lg hover:bg-gray-50 transition-colors">
-                <div className="flex justify-center mb-4">
-                  {item.icon}
+            {FEATURES.map((item, index) => {
+              const Icon = item.icon;
+              const iconColor = item.iconColor || 'text-secondary';
+              return (
+                <div key={index} className="text-center p-6 rounded-lg hover:bg-gray-50 transition-colors">
+                  <div className="flex justify-center mb-4">
+                    <Icon className={`w-8 h-8 ${iconColor}`} />
+                  </div>
+                  <h3 className="text-xl font-semibold text-gray-900 mb-2">{item.title}</h3>
+                  <p className="text-gray-600">{item.description}</p>
                 </div>
-                <h3 className="text-xl font-semibold text-gray-900 mb-2">{item.title}</h3>
-                <p className="text-gray-600">{item.description}</p>
-              </div>
-            ))}
+              );
+            })}
           </div>
         </div>
       </section>
@@ -170,6 +178,7 @@ const Home = () => {
                 <img
                   src={image}
                   alt={`Instagram post ${index + 1}`}
+                  loading="lazy"
                   className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
                 />
               </div>

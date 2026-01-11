@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo } from 'react';
 import { Link } from 'react-router-dom';
 import { ShoppingCart, Heart } from 'lucide-react';
 import { useCart } from '../context/CartContext';
@@ -46,6 +46,7 @@ const ProductCard = ({ product }) => {
           <img
             src={product.image}
             alt={product.name}
+            loading="lazy"
             className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300"
           />
         </div>
@@ -91,4 +92,4 @@ const ProductCard = ({ product }) => {
   );
 };
 
-export default ProductCard;
+export default memo(ProductCard);

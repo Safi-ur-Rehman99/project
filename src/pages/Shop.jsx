@@ -37,16 +37,16 @@ const Shop = () => {
       product.price >= priceRange[0] && product.price <= priceRange[1]
     );
 
-    // Sort products
+    // Sort products (create a new array to avoid mutation)
     switch (sortBy) {
       case 'price-low':
-        filtered.sort((a, b) => a.price - b.price);
+        filtered = [...filtered].sort((a, b) => a.price - b.price);
         break;
       case 'price-high':
-        filtered.sort((a, b) => b.price - a.price);
+        filtered = [...filtered].sort((a, b) => b.price - a.price);
         break;
       case 'name':
-        filtered.sort((a, b) => a.name.localeCompare(b.name));
+        filtered = [...filtered].sort((a, b) => a.name.localeCompare(b.name));
         break;
       default:
         // newest first (default order)
